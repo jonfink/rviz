@@ -1,0 +1,39 @@
+<package>
+    <description brief="Robot VIsualiZer">
+    
+    A 3d visualization environment for robots using ROS.
+    
+    </description>
+    <author>Josh Faust</author>
+    <license>BSD</license>
+    <review status="proposal cleared" notes=""/>
+    <url>http://pr.willowgarage.com/wiki/rviz</url>
+    <depend package="ogre"/>
+    <depend package="ogre_tools"/>
+    <depend package="roscpp"/>
+    <depend package="rosconsole"/>
+    <depend package="message_filters"/>
+    <depend package="std_msgs"/>
+    <depend package="sensor_msgs"/>
+    <depend package="geometry_msgs"/>
+    <depend package="nav_msgs"/>
+    <depend package="nav_msgs"/>
+    <depend package="tf"/>
+    <depend package="laser_geometry"/>
+    <depend package="wxpropgrid"/>
+    <depend package="rxtools"/>
+    <depend package="wxswig"/>
+    <depend package="wxPython_swig_interface"/>
+    <depend package="visualization_msgs" />
+    <depend package="yaml-cpp"/>
+    <depend package="urdf"/>
+    <depend package="resource_retriever"/>
+    <export> 
+        <cpp cflags="-I${prefix}/src/" lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lrviz"/>
+        <python path="${prefix}/lib/"/>
+    </export>
+
+  <rosdep name="wxwidgets"/>
+  <rosdep name="wxpython"/>
+</package>
+
