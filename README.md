@@ -19,3 +19,7 @@ For Ogre, I just download and use the precompiled SDK from their [website](http:
 There are still some details of the new propgrid stuff that don't quite work right -- this causes the occasional crash.  I'm hoping there are some other developers out there who can help find/debug/fix some of these errors (skipping the macports install of wxWidgets and building a version with debug flags enabled is invaluable for this).
 
 Also, please use the [github issues button](https://github.com/jonfink/rviz/issues) to track problems/solutions.
+
+## ROS Distribution
+
+I'm basing this code off of the newest version of rviz from trunk (i.e. Electric).  If you are using Diamondback (like me), check out the 'diamondback' branch here where I've added the newest visualization\_msgs and interactive\_markers packages.
