@@ -168,7 +168,11 @@ void VisualizationFrame::initialize(const std::string& display_config_file,
 #endif
   }
   wxBitmap splash;
-  splash.LoadFile(wxString::FromAscii(final_splash_path.c_str()));
+  bool ret = splash.LoadFile(wxString::FromAscii(final_splash_path.c_str()), wxBITMAP_TYPE_PNG);
+  if(!ret) {
+    printf("PROBLEM LOADING SPLASH IMAGE\n");
+    exit(-1);
+  }
   splash_ = new SplashScreen(this, splash);
   splash_->Show();
   splash_->setState("Initializing");
