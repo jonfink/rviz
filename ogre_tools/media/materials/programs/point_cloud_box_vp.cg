@@ -27,6 +27,26 @@ Output pointCloudBoxVP_main(float4 position : POSITION,
   return OUT;
 }
 
+Output pointCloudBoxVP_depth(float4 position : POSITION,
+                             float4 color : COLOR,
+                             float3 tex : TEXCOORD0,
+                                  
+                             uniform float4x4 worldviewproj,
+                             uniform float4 size,
+                             uniform float4x4 worldview_matrix,
+                             uniform float far_clip_distance)
+{
+  float4 pos = calculateBoxVertexPosition(position, tex, worldviewproj, size);
+  float4 pos_rel_view = mul(worldview_matrix, pos);
+  float normalized_depth = -pos_rel_view.z / far_clip_distance;
+
+  Output OUT;
+  OUT.position = pos;
+  OUT.color = float4( normalized_depth, normalized_depth, normalized_depth, 1 );
+  OUT.dim = tex;
+  return OUT;
+}
+
 Output pointCloudBoxVP_Selection_main(float4 position : POSITION, 
                                       float4 color : COLOR, 
                                       float3 tex : TEXCOORD0,
@@ -50,5 +70,20 @@ Output pointCloudBoxWithGP_VP_main(float4 position : POSITION,
   Output OUT;
   OUT.position = position;
   OUT.color = float4(color.x, color.y, color.z, alpha.x);
+  return OUT;
+}
+
+Output pointCloudBoxWithGP_VP_depth(float4 position : POSITION, 
+                                    float4 color : COLOR, 
+                                  
+                                    uniform float4x4 worldview_matrix,
+                                    uniform float far_clip_distance)
+{
+  float4 pos_rel_view = mul(worldview_matrix, position);
+  float normalized_depth = -pos_rel_view.z / far_clip_distance;
+
+  Output OUT;
+  OUT.position = position;
+  OUT.color = float4( normalized_depth, normalized_depth, normalized_depth, 1 );
   return OUT;
 }

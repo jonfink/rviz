@@ -7,7 +7,7 @@
     <author>Josh Faust</author>
     <license>BSD</license>
     <review status="doc reviewed" notes="2009/08/04 by kwc"/>
-    <url>http://pr.willowgarage.com/wiki/ROS</url>
+    <url>http://ros.org/wiki/ogre_tools</url>
     <depend package="wxswig"/>
     <depend package="ogre"/>
     <depend package="rosconsole"/>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, Willow Garage, Inc.
+ * Copyright (c) 2011, Willow Garage, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,22 +26,14 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+#ifndef OGRE_TOOLS_VERSION_H
+#define OGRE_TOOLS_VERSION_H
 
-#ifndef OGRE_TOOLS_INITIALIZATION_H
-#define OGRE_TOOLS_INITIALIZATION_H
-
-#include <stddef.h>
 #include <string>
-#include <vector>
 
 namespace ogre_tools
 {
+std::string get_version();
+}
 
-typedef std::vector<std::string> V_string;
-void initializeOgre(bool enable_ogre_log = false);
-void cleanupOgre();
-void initializeResources( const V_string& resource_paths );
-
-} // namespace ogre_tools
-
-#endif
+#endif // OGRE_TOOLS_VERSION_H

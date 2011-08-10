@@ -13,6 +13,22 @@ vertex_program ogre_tools/PointCloudBillboardVP cg
   }
 }
 
+vertex_program ogre_tools/PointCloudBillboardVP_Depth cg
+{
+  source point_cloud_billboard_vp.cg
+  entry_point pointCloudBillboardVP_depth
+  profiles vp20 vs_2_0 arbvp1 vs_1_1
+  
+  default_params
+  {
+    param_named_auto worldview_matrix worldview_matrix
+    param_named_auto far_clip_distance far_clip_distance
+    param_named_auto worldviewproj worldviewproj_matrix
+    param_named_auto camera_pos camera_position_object_space
+    param_named_auto size custom 0
+  }
+}
+
 vertex_program ogre_tools/PointCloudBillboardCommonFacingVP cg
 {
   source point_cloud_billboard_vp.cg
@@ -69,6 +85,19 @@ vertex_program ogre_tools/pointCloudBillboardWithGP_VP cg
   default_params
   {
     param_named_auto alpha custom 1
+  }
+}
+
+vertex_program ogre_tools/pointCloudBillboardWithGP_VP_Depth cg
+{
+  source point_cloud_billboard_vp.cg
+  entry_point pointCloudBillboardWithGP_VP_depth
+  profiles vp20 vs_2_0 arbvp1 vs_1_1
+  
+  default_params
+  {
+    param_named_auto worldview_matrix worldview_matrix
+    param_named_auto far_clip_distance far_clip_distance
   }
 }
 
@@ -137,12 +166,36 @@ fragment_program ogre_tools/PointCloudBillboardFP cg
   source point_cloud_billboard_fp.cg
   entry_point pointCloudBillboardFP_main
   profiles arbfp1 ps_2_0
+
+  default_params
+  {
+    param_named_auto highlight custom 5
+  }
+}
+
+fragment_program ogre_tools/PointCloudBillboardFP_Selection cg
+{
+  source point_cloud_billboard_fp.cg
+  entry_point pointCloudBillboardFP_selection
+  profiles arbfp1 ps_2_0
 }
 
 fragment_program ogre_tools/PointCloudBillboardSphereFP cg
 {
   source point_cloud_billboard_fp.cg
   entry_point pointCloudBillboardSphereFP_main
+  profiles arbfp1 ps_2_0
+
+  default_params
+  {
+    param_named_auto highlight custom 5
+  }
+}
+
+fragment_program ogre_tools/PointCloudBillboardSphereFP_Depth cg
+{
+  source point_cloud_billboard_fp.cg
+  entry_point pointCloudBillboardSphereFP_depth
   profiles arbfp1 ps_2_0
 }
 

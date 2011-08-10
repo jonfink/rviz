@@ -167,6 +167,8 @@ public:
   void setPickColor(const Ogre::ColourValue& color);
   void setColorByIndex(bool set);
 
+  void setHighlightColor( float r, float g, float b );
+
   virtual const Ogre::String& getMovableType() const { return sm_Type; }
   virtual const Ogre::AxisAlignedBox& getBoundingBox() const;
   virtual float getBoundingRadius() const;

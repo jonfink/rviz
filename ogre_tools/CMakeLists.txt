@@ -65,6 +65,12 @@ add_custom_command(OUTPUT   ${SWIG_OUTPUT_CPP_FILE}
                    src/ogre_tools/initialization.i
                    src/ogre_tools/initialization.h)
 
+# Build the SVN version number into the source so it can be printed at run-time.
+set(VERSION_FILE ${PROJECT_SOURCE_DIR}/build/version.cpp)
+execute_process(COMMAND          svnversion -n ${PROJECT_SOURCE_DIR}
+                OUTPUT_VARIABLE  SVN_VERSION)
+configure_file(src/ogre_tools/version.cpp.in ${VERSION_FILE} @ONLY)
+
 # We add src/ogre_tools to the include list so that
 # ogre_tools_swig_generated.cpp can find its headers.  This is part of a
 # workaround for a deficiency in CMake 2.4's handling of generated sources.
@@ -86,7 +92,8 @@ rosbuild_add_library(${PROJECT_NAME} src/ogre_tools/initialization.cpp
 			      src/ogre_tools/movable_text.cpp
 			      src/ogre_tools/wx_ogre_render_window.cpp
 			      src/ogre_tools/orthographic.cpp
-			      src/ogre_tools/stl_loader.cpp)
+			      src/ogre_tools/stl_loader.cpp
+                              ${VERSION_FILE})
 
 # make sure we set the gl and glu libraries only if they are avilable
 set(OGRE_TOOLS_GL_LIBS "")

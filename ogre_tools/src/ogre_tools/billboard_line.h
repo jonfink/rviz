@@ -95,6 +95,8 @@ public:
    */
   void setUserData( const Ogre::Any& data ) {}
 
+  Ogre::MaterialPtr getMaterial() { return material_; }
+
 private:
   void setupChains();
   Ogre::BillboardChain* createChain();

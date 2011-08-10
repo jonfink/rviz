@@ -25,6 +25,21 @@ material ogre_tools/PointCloudBillboardBase
     }
   }
   
+  technique gp_depth
+  {
+  	gpu_device_rule exclude *ati*
+    scheme Depth
+    
+    pass
+    {
+      alpha_rejection greater_equal 1
+      
+      vertex_program_ref ogre_tools/pointCloudBillboardWithGP_VP_Depth
+      {
+      }
+    }
+  }
+
   technique gp_selection_first_pass
   {
   	gpu_device_rule exclude *ati*
@@ -50,6 +65,20 @@ material ogre_tools/PointCloudBillboardBase
       alpha_rejection greater_equal 1
       
       vertex_program_ref ogre_tools/pointCloudBillboardWithGP_VP
+      {
+      }
+    }
+  }
+  
+  technique nogp_depth
+  {
+    scheme Depth
+    
+    pass
+    {
+      alpha_rejection greater_equal 1
+      
+      vertex_program_ref ogre_tools/PointCloudBillboardVP_Depth
       {
       }
     }
@@ -100,6 +129,20 @@ material ogre_tools/PointCloudBillboard : ogre_tools/PointCloudBillboardBase
     }
   }
   
+  technique gp_depth
+  { 
+    pass
+    { 
+      geometry_program_ref ogre_tools/PointCloudBillboardGP
+      {
+      }
+      
+      fragment_program_ref ogre_tools/DepthFP
+      {
+      }
+    }
+  }
+  
   technique gp_selection_first_pass
   { 
     pass
@@ -108,7 +151,7 @@ material ogre_tools/PointCloudBillboard : ogre_tools/PointCloudBillboardBase
       {
       }
       
-      fragment_program_ref ogre_tools/PointCloudBillboardFP
+      fragment_program_ref ogre_tools/PointCloudBillboardFP_Selection
       {
       }
     }
@@ -122,7 +165,7 @@ material ogre_tools/PointCloudBillboard : ogre_tools/PointCloudBillboardBase
       {
       }
       
-      fragment_program_ref ogre_tools/PointCloudBillboardFP
+      fragment_program_ref ogre_tools/PointCloudBillboardFP_Selection
       {
       }
     }
@@ -138,13 +181,25 @@ material ogre_tools/PointCloudBillboard : ogre_tools/PointCloudBillboardBase
     }
   }
   
+  technique nogp_depth
+  {
+    scheme Depth
+    
+    pass
+    {
+      fragment_program_ref ogre_tools/DepthFP
+      {
+      }
+    }
+  }
+  
   technique nogp_selection_first_pass
   {
     scheme Pick
     
     pass
     {
-      fragment_program_ref ogre_tools/PointCloudBillboardFP
+      fragment_program_ref ogre_tools/PointCloudBillboardFP_Selection
       {
       }
     }
@@ -156,7 +211,7 @@ material ogre_tools/PointCloudBillboard : ogre_tools/PointCloudBillboardBase
     
     pass
     {
-      fragment_program_ref ogre_tools/PointCloudBillboardFP
+      fragment_program_ref ogre_tools/PointCloudBillboardFP_Selection
       {
       }
     }
@@ -174,6 +229,20 @@ material ogre_tools/PointCloudBillboardSphere : ogre_tools/PointCloudBillboardBa
       }
       
       fragment_program_ref ogre_tools/PointCloudBillboardSphereFP
+      {
+      }
+    }
+  }
+  
+  technique gp_depth
+  { 
+    pass
+    { 
+      geometry_program_ref ogre_tools/PointCloudBillboardSphereGP
+      {
+      }
+      
+      fragment_program_ref ogre_tools/PointCloudBillboardSphereFP_Depth
       {
       }
     }
@@ -212,6 +281,18 @@ material ogre_tools/PointCloudBillboardSphere : ogre_tools/PointCloudBillboardBa
     pass
     {
       fragment_program_ref ogre_tools/PointCloudBillboardSphereFP
+      {
+      }
+    }
+  }
+  
+  technique nogp_depth
+  {
+    scheme Depth
+    
+    pass
+    {
+      fragment_program_ref ogre_tools/PointCloudBillboardSphereFP_Depth
       {
       }
     }
@@ -287,7 +368,7 @@ material ogre_tools/PointCloudBillboardCommonFacing : ogre_tools/PointCloudBillb
       {
       }
       
-      fragment_program_ref ogre_tools/PointCloudBillboardFP
+      fragment_program_ref ogre_tools/PointCloudBillboardFP_Selection
       {
       }
     }
@@ -305,7 +386,7 @@ material ogre_tools/PointCloudBillboardCommonFacing : ogre_tools/PointCloudBillb
       {
       }
       
-      fragment_program_ref ogre_tools/PointCloudBillboardFP
+      fragment_program_ref ogre_tools/PointCloudBillboardFP_Selection
       {
       }
     }

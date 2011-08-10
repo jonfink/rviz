@@ -20,6 +20,27 @@ material ogre_tools/PointCloudBox
     }
   }
   
+  technique gp_depth
+  {
+    gpu_device_rule exclude *ati*
+    scheme Depth
+  
+    pass
+    {
+      vertex_program_ref ogre_tools/pointCloudBoxWithGP_VP_Depth
+      {
+      }
+      
+      geometry_program_ref ogre_tools/PointCloudBoxGP
+      {
+      }
+      
+      fragment_program_ref ogre_tools/DepthFP
+      {
+      }
+    }
+  }
+  
   technique gp_selection_first_pass
   {
     gpu_device_rule exclude *ati*
@@ -71,6 +92,22 @@ material ogre_tools/PointCloudBox
       }
       
       fragment_program_ref ogre_tools/PointCloudBoxFP
+      {
+      }
+    }
+  } 
+  
+  technique nogp_depth
+  {
+    scheme Depth
+
+    pass
+    {
+      vertex_program_ref ogre_tools/PointCloudBoxVP_Depth
+      {
+      }
+      
+      fragment_program_ref ogre_tools/DepthFP
       {
       }
     }

@@ -49,6 +49,7 @@
 #define PICK_COLOR_PARAMETER 2
 #define NORMAL_PARAMETER 3
 #define UP_PARAMETER 4
+#define HIGHLIGHT_PARAMETER 5
 
 namespace ogre_tools
 {
@@ -228,6 +229,18 @@ void PointCloud::setColorByIndex(bool set)
   color_by_index_ = set;
 
   regenerateAll();
+}
+
+void PointCloud::setHighlightColor( float r, float g, float b )
+{
+  Ogre::Vector4 highlight( r, g, b, 0.0f );
+
+  V_PointCloudRenderable::iterator it = renderables_.begin();
+  V_PointCloudRenderable::iterator end = renderables_.end();
+  for (; it != end; ++it)
+  {
+    (*it)->setCustomParameter(HIGHLIGHT_PARAMETER, highlight);
+  }
 }
 
 void PointCloud::setRenderMode(RenderMode mode)
@@ -713,9 +726,11 @@ PointCloudRenderablePtr PointCloud::getOrCreateRenderable()
   rend->setMaterial(current_material_->getName());
   Ogre::Vector4 size(width_, height_, depth_, 0.0f);
   Ogre::Vector4 alpha(alpha_, 0.0f, 0.0f, 0.0f);
+  Ogre::Vector4 highlight(0.0f, 0.0f, 0.0f, 0.0f);
   Ogre::Vector4 pick_col(pick_color_.r, pick_color_.g, pick_color_.b, pick_color_.a);
   rend->setCustomParameter(SIZE_PARAMETER, size);
   rend->setCustomParameter(ALPHA_PARAMETER, alpha);
+  rend->setCustomParameter(HIGHLIGHT_PARAMETER, highlight);
   rend->setCustomParameter(PICK_COLOR_PARAMETER, pick_col);
   rend->setCustomParameter(NORMAL_PARAMETER, Ogre::Vector4(common_direction_));
   rend->setCustomParameter(UP_PARAMETER, Ogre::Vector4(common_up_vector_));

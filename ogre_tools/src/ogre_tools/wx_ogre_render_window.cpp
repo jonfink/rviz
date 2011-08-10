@@ -18,6 +18,10 @@
 #include <ros/console.h>
 #include <ros/assert.h>
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#include <stdlib.h>
+#endif
+
 namespace ogre_tools
 {
 
@@ -205,9 +209,7 @@ void wxOgreRenderWindow::onMouseEvents (wxMouseEvent &evt)
 void wxOgreRenderWindow::createRenderWindow ()
 {
   Ogre::NameValuePairList params;
-  printf("setting params ... ");
 #if defined(__WXMAC__)
-  printf(" for mac ");
   params["macAPI"] = "cocoa";
   params["macAPICocoaUseNSView"] = "true";
   params["externalWindowHandle"] = getOgreHandle();
@@ -215,15 +217,39 @@ void wxOgreRenderWindow::createRenderWindow ()
   params["parentWindowHandle"] = getOgreHandle();
 #endif
 
-  printf("Done setting params\n");
-
   // Get wx control window size
   int width;
   int height;
   GetSize (&width, &height);
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-  ogre_root_->getRenderSystem()->setConfigOption("RTT Preferred Mode", "PBuffer");
+  {
+    // The RTT mode seems to cause trouble.  Some platforms have an
+    // error with PBuffer, some have an error with FBO.  Both are
+    // supposed to be faster than Copy, which is another option.
+    // Until I get a more elegant fix, I'm allowing people to set the
+    // RTT mode via an environment variable.
+    char *rtt_default = "PBuffer";
+
+    char* rtt_preferred_mode = getenv("OGRE_RTT_MODE");
+    if( rtt_preferred_mode )
+    {
+      if( strcmp( rtt_preferred_mode, "Copy" ) != 0 &&
+          strcmp( rtt_preferred_mode, "PBuffer" ) != 0 &&
+          strcmp( rtt_preferred_mode, "FBO" ) != 0 )
+      {
+        ROS_ERROR( "Environtment variable OGRE_RTT_MODE has invalid value: '%s'.  Should be", rtt_preferred_mode );
+        ROS_ERROR( "either FBO, PBuffer, Copy, or should not be set.  Using default value %s.", rtt_default );
+        rtt_preferred_mode = rtt_default;
+      }
+    }
+    else
+    {
+      rtt_preferred_mode = rtt_default;
+    }
+    ogre_root_->getRenderSystem()->setConfigOption( "RTT Preferred Mode", rtt_preferred_mode );
+    ROS_INFO( "RTT Preferred Mode is %s.", rtt_preferred_mode );
+  }
 #endif
 
   // Create the render window
