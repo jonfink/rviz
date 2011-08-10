@@ -28,3 +28,4 @@ CMakeCache.txt
 *.bag
 
 msg_gen
+/rviz/src/rviz/rviz_swig_generated.cpp
