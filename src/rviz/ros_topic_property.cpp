@@ -76,24 +76,17 @@ void ROSTopicProperty::checkForEmptyValue()
 {
   wxString str = m_value.GetString();
 
-  wxPGCell* cell = GetCell(1);
-  if (!cell)
-  {
-    cell = new wxPGCell(str, wxNullBitmap, wxNullColour, wxNullColour);
-    SetCell(1, cell);
-  }
-
   if (str.IsEmpty())
   {
-    cell->SetBgCol(wxNullColour);
-    cell->SetFgCol(wxNullColour);
-    cell->SetText(wxT("Fill in topic here..."));
+    GetCell(1).SetBgCol(wxTransparentColour);
+    GetCell(1).SetFgCol(wxTransparentColour);
+    GetCell(1).SetText(wxT("Fill in topic here..."));
   }
   else
   {
-    cell->SetBgCol(wxNullColour);
-    cell->SetFgCol(wxNullColour);
-    cell->SetText(str);
+    GetCell(1).SetBgCol(wxTransparentColour);
+    GetCell(1).SetFgCol(wxTransparentColour);
+    GetCell(1).SetText(str);
   }
 }
 

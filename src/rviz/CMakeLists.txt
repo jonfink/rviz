@@ -10,9 +10,17 @@ set(SWIG_FLAGS ${${PROJECT_NAME}_SWIG_FLAGS})
 rosbuild_find_ros_package(wxswig)
 set(WXSWIG_EXECUTABLE ${wxswig_PACKAGE_PATH}/bin/swig)
 
+# find wxWidgets with required flags
+find_package(wxWidgets REQUIRED COMPONENTS std propgrid aui)
+include(${wxWidgets_USE_FILE})
+include_directories( ${wxWidgets_INCLUDE_DIRS} )
+
 # Build the SVN version number into the source so it can be printed at run-time.
 set(VERSION_FILE ${PROJECT_SOURCE_DIR}/build/version.cpp)
-execute_process(COMMAND          svnversion -n ${PROJECT_SOURCE_DIR}
+
+# execute_process(COMMAND          svnversion -n ${PROJECT_SOURCE_DIR}
+#                 OUTPUT_VARIABLE  SVN_VERSION)
+execute_process(COMMAND          cat .git/refs/heads/master
                 OUTPUT_VARIABLE  SVN_VERSION)
 configure_file(version.cpp.in ${VERSION_FILE} @ONLY)
 
@@ -29,7 +37,7 @@ else("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 2.4)
 endif("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 2.4)
 
 set_source_files_properties(${SWIG_OUTPUT_CPP_FILE} PROPERTIES GENERATED true)
-add_custom_command(OUTPUT   ${SWIG_OUTPUT_CPP_FILE} 
+add_custom_command(OUTPUT   ${SWIG_OUTPUT_CPP_FILE}
                             ${SWIG_OUTPUT_PYTHON_FILE}
                    COMMAND  ${SWIG_COMMAND}
                    DEPENDS  ${SWIG_INTERFACE_FILE}
@@ -40,7 +48,7 @@ add_custom_command(OUTPUT   ${SWIG_OUTPUT_CPP_FILE}
                             helpers/color.i
                             visualization_manager.h
                             visualization_panel.h
-                            visualization_frame.h    
+                            visualization_frame.h
                             generated/rviz_generated.h
                             display.h
                             helpers/color.h

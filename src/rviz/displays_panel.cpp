@@ -202,7 +202,7 @@ DisplaysPanel::DisplaysPanel( wxWindow* parent )
   property_grid_->Connect( wxEVT_PG_HIGHLIGHTED, wxPropertyGridEventHandler( DisplaysPanel::onPropertyHighlighted ), NULL, this );
 
   property_grid_->SetCaptionBackgroundColour( wxColour( 4, 89, 127 ) );
-  property_grid_->SetCaptionForegroundColour( *wxWHITE );
+  property_grid_->SetCaptionTextColour( *wxWHITE );
 
   help_html_->Connect(wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEventHandler(DisplaysPanel::onLinkClicked), NULL, this);
 
@@ -238,7 +238,7 @@ void DisplaysPanel::initialize(VisualizationManager* manager)
 void DisplaysPanel::sortDisplays()
 {
   property_grid_->Freeze();
-  property_grid_->Sort(property_grid_->GetRoot());
+  property_grid_->SortChildren(property_grid_->GetRoot());
   property_grid_->Refresh();
   property_grid_->Thaw();
 }
@@ -436,12 +436,14 @@ void DisplaysPanel::setDisplayCategoryColor(const DisplayWrapper* wrapper)
   CategoryPropertyPtr cat = wrapper->getCategory().lock();
   wxPGProperty* property = wrapper->getCategory().lock()->getPGProperty();
 
-  wxPGCell* cell = property->GetCell( 0 );
-  if ( !cell )
-  {
-    cell = new wxPGCell(*(wxString*)0, wxNullBitmap, wxNullColour, wxNullColour);
-    property->SetCell( 0, cell );
-  }
+  // wxPGCell* cell = property->GetCell( 0 );
+  // if ( !cell )
+  // {
+  //   cell = new wxPGCell(*(wxString*)0, wxNullBitmap, wxNullColour, wxNullColour);
+  //   property->SetCell( 0, cell );
+  // }
+  // creates default cell
+  property->GetCell(0);
 
   if (!wrapper->isLoaded())
   {

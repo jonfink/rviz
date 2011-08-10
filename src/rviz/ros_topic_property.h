@@ -31,7 +31,6 @@
 #define RVIZ_ROS_TOPIC_PROPERTY_H
 
 #include <wx/wx.h>
-#include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/propdev.h>
 
 #include <string>

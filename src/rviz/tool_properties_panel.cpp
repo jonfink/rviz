@@ -64,7 +64,7 @@ ToolPropertiesPanel::ToolPropertiesPanel( wxWindow* parent )
 
   property_grid_->SetExtraStyle(wxPG_EX_DISABLE_TLP_TRACKING);
   property_grid_->SetCaptionBackgroundColour( wxColour( 4, 89, 127 ) );
-  property_grid_->SetCaptionForegroundColour( *wxWHITE );
+  property_grid_->SetCaptionTextColour( *wxWHITE );
 
   property_grid_->Connect( wxEVT_PG_CHANGING, wxPropertyGridEventHandler( ToolPropertiesPanel::onPropertyChanging ), NULL, this );
   property_grid_->Connect( wxEVT_PG_CHANGED, wxPropertyGridEventHandler( ToolPropertiesPanel::onPropertyChanged ), NULL, this );

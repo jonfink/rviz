@@ -70,15 +70,8 @@ void setPropertyToColors(wxPGProperty* property, const wxColour& fg_color, const
     return;
   }
 
-  wxPGCell* cell = property->GetCell( column );
-  if ( !cell )
-  {
-    cell = new wxPGCell( *(wxString*)0, wxNullBitmap, *wxLIGHT_GREY, *wxGREEN );
-    property->SetCell( column, cell );
-  }
-
-  cell->SetFgCol(fg_color);
-  cell->SetBgCol(bg_color);
+  property->GetCell(column).SetFgCol(fg_color);
+  property->GetCell(column).SetBgCol(bg_color);
 }
 
 void setPropertyToError(wxPGProperty* property, uint32_t column)
@@ -93,7 +86,7 @@ void setPropertyToWarn(wxPGProperty* property, uint32_t column)
 
 void setPropertyToOK(wxPGProperty* property, uint32_t column)
 {
-  setPropertyToColors(property, wxNullColour, wxNullColour, column);
+  setPropertyToColors(property, wxTransparentColour, wxTransparentColour, column);
 }
 
 void setPropertyToDisabled(wxPGProperty* property, uint32_t column)
@@ -317,11 +310,21 @@ void StatusProperty::writeToGrid()
 
     if ( parent_.lock() )
     {
-      top_property_ = grid_->AppendIn( getCategoryPGProperty(parent_), new wxPropertyCategory(name_, prefix_ + top_name) );
+      //
+      // Under wxWidgets-2.9, categories can only be children of the root node
+      // or other categories.  It appears that this was more flexible in version
+      // 2.8 since rviz builds its propgrid by "rooting" each module with a
+      // checkbox (i.e. not a category) and then putting the status category as
+      // a child.  Fortunately, it is possible to arbitrarily nest properties so
+      // we can basically abandon (for now) the concept of categories and just
+      // make everything a bunch of nested properties.
+      //
+      //top_property_ = grid_->AppendIn( getCategoryPGProperty(parent_), new wxPropertyCategory(name_, prefix_ + top_name) );
+      top_property_ = grid_->AppendIn( getCategoryPGProperty(parent_), new wxStringProperty(name_, prefix_ + top_name, "") );
     }
     else
     {
-      top_property_ = grid_->AppendIn( grid_->GetRoot(), new wxPropertyCategory(name_, prefix_ + top_name));
+      top_property_ = grid_->AppendIn( grid_->GetRoot(), new wxStringProperty(name_, prefix_ + top_name, ""));
     }
 
     top_property_->SetClientData( this );
@@ -439,13 +442,7 @@ void StatusProperty::writeToGrid()
   }
 
   grid_->SetPropertyLabel(top_property_, label);
-  wxPGCell* cell = top_property_->GetCell( 0 );
-  if ( cell )
-  {
-    //cell->SetText(label);
-  }
-
-  grid_->Sort(top_property_);
+  grid_->SortChildren(top_property_);
 }
 
 StatusLevel StatusProperty::getTopLevelStatus()
@@ -888,7 +885,7 @@ void EnumProperty::writeToGrid()
   {
     property_ = grid_->AppendIn( getCategoryPGProperty(parent_), new wxEnumProperty( name_, prefix_ + name_ ) );
     wxPGChoices choices = choices_->Copy();
-    grid_->SetPropertyChoices(property_, choices);
+    property_->SetChoices(choices);
 
     if ( !hasSetter() )
     {
@@ -898,7 +895,7 @@ void EnumProperty::writeToGrid()
   else
   {
     wxPGChoices choices = choices_->Copy();
-    grid_->SetPropertyChoices(property_, choices);
+    grid_->SetChoices(choices);
     grid_->SetPropertyValue(property_, (long)get());
   }
 
@@ -983,7 +980,7 @@ void EditEnumProperty::writeToGrid()
     ee_property_ = new EditEnumPGProperty(name_, prefix_ + name_);
     property_ = grid_->AppendIn( getCategoryPGProperty(parent_), ee_property_ );
     wxPGChoices choices = choices_->Copy();
-    grid_->SetPropertyChoices(property_, choices);
+    property_->SetChoices(choices);
 
     if ( !hasSetter() )
     {
@@ -993,7 +990,7 @@ void EditEnumProperty::writeToGrid()
   else
   {
     wxPGChoices choices = choices_->Copy();
-    grid_->SetPropertyChoices(property_, choices);
+    property_->SetChoices(choices);
     grid_->SetPropertyValue(property_, wxString::FromAscii( get().c_str() ));
   }
 
@@ -1058,11 +1055,7 @@ void CategoryProperty::setLabel( const std::string& label )
   {
     grid_->SetPropertyLabel( property_, wxString::FromAscii( label.c_str() ) );
 
-    wxPGCell* cell = property_->GetCell( 0 );
-    if ( cell )
-    {
-      //cell->SetText( wxString::FromAscii( label.c_str() ) );
-    }
+    //property_->GetCell(0).SetText(wxString::FromAscii( label.c_str() ) );
   }
 }
 
@@ -1095,7 +1088,7 @@ void CategoryProperty::writeToGrid()
       }
       else
       {
-        property_ = grid_->AppendIn( getCategoryPGProperty(parent_), new wxPropertyCategory( label_, prefix_ + name_ ) );
+        property_ = grid_->AppendIn( getCategoryPGProperty(parent_), new wxStringProperty( label_, prefix_ + name_, "") );
       }
     }
     else
@@ -1107,7 +1100,7 @@ void CategoryProperty::writeToGrid()
       }
       else
       {
-        property_ = grid_->AppendIn( grid_->GetRoot(),  new wxPropertyCategory( name_, prefix_ + name_ ) );
+        property_ = grid_->AppendIn( grid_->GetRoot(),  new wxStringProperty( name_, prefix_ + name_, "") );
       }
     }
   }
@@ -1186,10 +1179,9 @@ void CategoryProperty::setToOK()
   if (grid_)
   {
     setPropertyToColors(property_, grid_->GetCaptionForegroundColour(), grid_->GetCaptionBackgroundColour(), 0);
-    wxPGCell* cell = property_->GetCell(0);
     wxFont font = grid_->GetFont();
     font.SetWeight(wxBOLD);
-    cell->SetFont(font);
+    property_->GetCell(0).SetFont(font);
     //setPropertyToColors(property_, grid_->GetCaptionForegroundColour(), grid_->GetCaptionBackgroundColour(), 1);
   }
 }

@@ -412,8 +412,11 @@ void VisualizationFrame::updateRecentConfigMenu()
   for (; it != end; ++it)
   {
     const std::string& path = *it;
-    wxMenuItem* item = recent_configs_menu_->Append(wxID_ANY, wxString::FromAscii(path.c_str()));
-    Connect(item->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(VisualizationFrame::onRecentConfigSelected), NULL, this);
+    // weird bug sometimes where there are invalid recent_configs (with no string in path)
+    if(path.size() > 0) {
+      wxMenuItem* item = recent_configs_menu_->Append(wxID_ANY, wxString::FromAscii(path.c_str()));
+      Connect(item->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(VisualizationFrame::onRecentConfigSelected), NULL, this);
+    }
   }
 }
 

@@ -32,7 +32,6 @@
 
 #include <wx/wx.h>
 #include <wx/propgrid/propgrid.h>
-#include <wx/propgrid/propdev.h>
 #include <wx/propgrid/editors.h>
 
 #include <string>
