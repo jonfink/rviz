@@ -445,7 +445,7 @@ void PropertyManager::clear()
   if (grid_)
   {
     grid_->Clear();
-    grid_->Thaw();
+    //grid_->Thaw();
   }
 }
 
