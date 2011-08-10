@@ -3,7 +3,7 @@
 import os
 import sys
 
-WXVER = '2.8'
+WXVER = '2.9'
 import wxversion
 if wxversion.checkInstalled(WXVER):
   wxversion.select(WXVER)
@@ -18,20 +18,20 @@ roslib.load_manifest('rviz')
 
 import rviz
 import ogre_tools
-    
+
 
 class VisualizerApp(wx.App):
   def __init__(self):
     wx.App.__init__(self)
-  
+
   def OnInit(self):
     ogre_tools.initializeOgre()
     frame = rviz.VisualizationFrame(None)
     frame.initialize()
     frame.Show(True)
     return True
-        
-  def OnExit(self):        
+
+  def OnExit(self):
     ogre_tools.cleanupOgre()
 
 if __name__ == "__main__":
