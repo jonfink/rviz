@@ -196,7 +196,7 @@ bool InteractiveMarker::processMessage( visualization_msgs::InteractiveMarkerCon
           (*parent_it).second.child_ids.push_back( entry.id );
         }
       }
-    }      
+    }
 
     populateMenu( menu_.get(), top_level_menu_ids_ );
   }
@@ -436,7 +436,7 @@ bool InteractiveMarker::handleMouseEvent(ViewportMouseEvent& event, const std::s
     feedback.event_type = (event.event.LeftDown() ?
                            visualization_msgs::InteractiveMarkerFeedback::MOUSE_DOWN :
                            visualization_msgs::InteractiveMarkerFeedback::MOUSE_UP);
-                           
+
     feedback.control_name = control_name;
     feedback.marker_name = name_;
     publishFeedback( feedback, got_3D_point, point_rel_world );
@@ -457,8 +457,10 @@ bool InteractiveMarker::handleMouseEvent(ViewportMouseEvent& event, const std::s
                                                          three_d_point_for_menu_ );
 
       event.panel->setContextMenu( menu_ );
-      wxContextMenuEvent context_event( wxEVT_CONTEXT_MENU, 0, event.event.GetPosition() );
-      event.panel->AddPendingEvent( context_event );
+      //wxContextMenuEvent context_event( wxEVT_CONTEXT_MENU, 0, event.event.GetPosition() );
+      wxContextMenuEvent *context_event = new wxContextMenuEvent( wxEVT_CONTEXT_MENU, 0, event.event.GetPosition() );
+      //event.panel->QueueEvent( context_event );
+      printf("TODO: fix 'event.panel->QueueEvent( context_event' in %s:%d\n", __FILE__, __LINE__);
       last_control_name_ = control_name;
       return true;
     }
