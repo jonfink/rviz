@@ -895,7 +895,7 @@ void EnumProperty::writeToGrid()
   else
   {
     wxPGChoices choices = choices_->Copy();
-    grid_->SetChoices(choices);
+    property_->SetChoices(choices);
     grid_->SetPropertyValue(property_, (long)get());
   }
 

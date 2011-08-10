@@ -72,7 +72,7 @@ wxPGWindowList EditEnumPGEditor::CreateControls(wxPropertyGrid *propgrid, wxPGPr
         continue;
       }
 
-      property->InsertChoice().Add(wxString::FromAscii(choice.c_str()), wxNOT_FOUND);
+      property->InsertChoice(wxString::FromAscii(choice.c_str()), wxNOT_FOUND);
     }
   }
 
