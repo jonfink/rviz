@@ -41,38 +41,76 @@ namespace rviz
 IMPLEMENT_DYNAMIC_CLASS(TFFramePGEditor, wxPGComboBoxEditor);
 IMPLEMENT_DYNAMIC_CLASS(TFFramePGProperty, wxEditEnumProperty);
 
-TFFramePGEditor::TFFramePGEditor()
-{
+  TFFramePGEditor::TFFramePGEditor()
+  {
 
-}
+  }
+
+  void TFFramePGEditor::OnFocus( wxPGProperty* property, wxWindow* ctrl ) const
+  {
+    while(property->GetChoices().GetCount() > 0)
+      property->DeleteChoice(0);
+
+    printf("********************************* HERE *************************************\n");
+    //property->InsertChoice(wxT(FIXED_FRAME_STRING), wxNOT_FOUND);
+    printf("... Adding <FIXED FRAME>\n");
+    property->AddChoice(wxT(FIXED_FRAME_STRING));
+
+    typedef std::vector<std::string> V_string;
+    V_string frames;
+    FrameManager::instance()->getTFClient()->getFrameStrings( frames );
+    std::sort(frames.begin(), frames.end());
+
+    V_string::iterator it = frames.begin();
+    V_string::iterator end = frames.end();
+    for (; it != end; ++it)
+      {
+        const std::string& frame = *it;
+        if (frame.empty())
+          {
+            continue;
+          }
+
+        //property->InsertChoice(wxString::FromAscii(frame.c_str()), wxNOT_FOUND);
+        printf("... Adding %s\n", frame.c_str());
+        property->AddChoice(wxString::FromAscii(frame.c_str()));
+      }
+
+    wxPGComboBoxEditor::OnFocus( property, ctrl );
+  }
+
 
 wxPGWindowList TFFramePGEditor::CreateControls(wxPropertyGrid *propgrid, wxPGProperty *property, const wxPoint &pos, const wxSize &size) const
 {
-  unsigned int len = property->GetChoices().GetCount();
-  for(int i=0; i < len; ++i)
-    property->DeleteChoice(i);
+  wxPGWindowList ret = wxPGComboBoxEditor::CreateControls(propgrid, property, pos, size);
 
-  property->InsertChoice(wxT(FIXED_FRAME_STRING), wxNOT_FOUND);
+  // unsigned int len = property->GetChoices().GetCount();
+  // for(int i=0; i < len; ++i)
+  //   property->DeleteChoice(i);
 
-  typedef std::vector<std::string> V_string;
-  V_string frames;
-  FrameManager::instance()->getTFClient()->getFrameStrings( frames );
-  std::sort(frames.begin(), frames.end());
+  // printf("********************************* HERE *************************************\n");
+  // property->InsertChoice(wxT(FIXED_FRAME_STRING), wxNOT_FOUND);
+  // //property->AddChoice(wxT(FIXED_FRAME_STRING));
 
-  V_string::iterator it = frames.begin();
-  V_string::iterator end = frames.end();
-  for (; it != end; ++it)
-  {
-    const std::string& frame = *it;
-    if (frame.empty())
-    {
-      continue;
-    }
+  // typedef std::vector<std::string> V_string;
+  // V_string frames;
+  // FrameManager::instance()->getTFClient()->getFrameStrings( frames );
+  // std::sort(frames.begin(), frames.end());
 
-    property->InsertChoice(wxString::FromAscii(frame.c_str()), wxNOT_FOUND);
-  }
+  // V_string::iterator it = frames.begin();
+  // V_string::iterator end = frames.end();
+  // for (; it != end; ++it)
+  // {
+  //   const std::string& frame = *it;
+  //   if (frame.empty())
+  //   {
+  //     continue;
+  //   }
 
-  return wxPGComboBoxEditor::CreateControls(propgrid, property, pos, size);
+  //   property->InsertChoice(wxString::FromAscii(frame.c_str()), wxNOT_FOUND);
+  // }
+
+  return ret;
 }
 
 TFFramePGProperty::TFFramePGProperty()

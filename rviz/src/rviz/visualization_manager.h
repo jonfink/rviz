@@ -307,7 +307,8 @@ protected:
 
   PropertyManager* property_manager_;
   PropertyManager* tool_property_manager_;
-  TFFramePropertyWPtr target_frame_property_;
+  //TFFramePropertyWPtr target_frame_property_;
+  EditEnumPropertyWPtr target_frame_property_;
   EditEnumPropertyWPtr fixed_frame_property_;
   StatusPropertyWPtr status_property_;
 

@@ -50,6 +50,7 @@ class TFFramePGEditor : public wxPGComboBoxEditor
 public:
   TFFramePGEditor();
   virtual wxPGWindowList CreateControls(wxPropertyGrid *propgrid, wxPGProperty *property, const wxPoint &pos, const wxSize &size) const;
+  virtual void OnFocus( wxPGProperty* property, wxWindow* ctrl ) const;
 };
 
 class TFFramePGProperty : public wxEditEnumProperty
