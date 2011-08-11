@@ -127,7 +127,9 @@ VisualizationManager::VisualizationManager( RenderPanel* render_panel, WindowMan
   tool_property_manager_ = new PropertyManager();
 
   CategoryPropertyWPtr options_category = property_manager_->createCategory( ".Global Options", "", CategoryPropertyWPtr(), this );
-  target_frame_property_ = property_manager_->createProperty<TFFrameProperty>( "Target Frame", "", boost::bind( &VisualizationManager::getTargetFrame, this ),
+  // target_frame_property_ = property_manager_->createProperty<TFFrameProperty>( "Target Frame", "", boost::bind( &VisualizationManager::getTargetFrame, this ),
+  //                                                                             boost::bind( &VisualizationManager::setTargetFrame, this, _1 ), options_category, this );
+  target_frame_property_ = property_manager_->createProperty<EditEnumProperty>( "Target Frame", "", boost::bind( &VisualizationManager::getTargetFrame, this ),
                                                                               boost::bind( &VisualizationManager::setTargetFrame, this, _1 ), options_category, this );
   setPropertyHelpText(target_frame_property_, "Reference frame for the 3D camera view.");
   fixed_frame_property_ = property_manager_->createProperty<EditEnumProperty>( "Fixed Frame", "", boost::bind( &VisualizationManager::getFixedFrame, this ),
@@ -475,6 +477,7 @@ void VisualizationManager::updateFrames()
   if (frames != available_frames_)
   {
     fixed_prop->clear();
+    target_prop->clear();
 
     V_string::iterator it = frames.begin();
     V_string::iterator end = frames.end();
@@ -488,6 +491,7 @@ void VisualizationManager::updateFrames()
       }
 
       fixed_prop->addOption(frame);
+      target_prop->addOption(frame);
     }
 
     available_frames_ = frames;
@@ -1033,7 +1037,7 @@ bool VisualizationManager::setCurrentViewControllerType(const std::string& type)
     view_controller_ = new OrbitViewController(this, "Orbit",target_scene_node_);
   }
   else if (type == "rviz::XYOrbitViewController" || type == "XYOrbit" ||
-           type == "rviz::SimpleOrbitViewController" || type == "SimpleOrbit" /* the old class name */) 
+           type == "rviz::SimpleOrbitViewController" || type == "SimpleOrbit" /* the old class name */)
   {
     view_controller_ = new XYOrbitViewController(this, "XYOrbit",target_scene_node_);
   }
